@@ -20,14 +20,15 @@ class MainActivity : ComponentActivity() {
         setContent {
             AndroidCTFSeminarTheme {
                 Scaffold(modifier = Modifier.fillMaxSize()) { innerPadding ->
-                    val flagText = if (viewModel.rotateCount >= 6) {
+                    val text = if (viewModel.rotateCount >= 6) {
                         getFlagFromJNI()
                     } else {
                         "Welcome to the Main Screen!\nBut you can't see the flag yet."
                     }
                     MainScreen(
                         modifier = Modifier.padding(innerPadding),
-                        flagText = flagText
+                        text = text,
+                        isShowFlag = viewModel.rotateCount >= 6
                     )
                 }
             }

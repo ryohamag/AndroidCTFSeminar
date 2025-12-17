@@ -29,7 +29,12 @@ Java_com_websarva_wings_androidctfseminar_MainActivity_getFlagFromJNI(
     // ここにFlagを記述します。
     // 単純な文字列だとバイナリ解析コマンド(strings)で見えてしまうため、
     // CTF的には一文字ずつ配列に入れる「スタックストリング」などが有効です。
-    char flag[] = { 'F', 'L', 'A', 'G', '{', 'H', 'e', 'l', 'l', 'o', '_', 'J', 'N', 'I', '}', 0 };
+    char flag[] = {
+            'F', 'L', 'A', 'G', '{',
+            'R', '0', 't', '4', 't', '1', '0', 'n', '_',
+            'M', '4', 's', 't', '3', 'r',
+            '}', 0 // 最後は必ず0 (null終端)
+    };
 
     return env->NewStringUTF(flag);
 }
