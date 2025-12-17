@@ -1,47 +1,49 @@
 package com.websarva.wings.androidctfseminar
 
 import android.os.Bundle
+import android.util.Log
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
 import androidx.activity.enableEdgeToEdge
+import androidx.activity.viewModels
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.padding
 import androidx.compose.material3.Scaffold
-import androidx.compose.material3.Text
-import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.tooling.preview.Preview
 import com.websarva.wings.androidctfseminar.ui.theme.AndroidCTFSeminarTheme
 
 class MainActivity : ComponentActivity() {
+    val viewModel: MainViewModel by viewModels()
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         enableEdgeToEdge()
         setContent {
             AndroidCTFSeminarTheme {
                 Scaffold(modifier = Modifier.fillMaxSize()) { innerPadding ->
-                    Greeting(
-                        name = "Android",
-                        modifier = Modifier.padding(innerPadding)
+                    val flagText = if (viewModel.rotateCount >= 6) {
+                        getFlagFromJNI()
+                    } else {
+                        "Welcome to the Main Screen!\nBut you can't see the flag yet."
+                    }
+                    MainScreen(
+                        modifier = Modifier.padding(innerPadding),
+                        flagText = flagText
                     )
                 }
             }
         }
     }
-}
 
-@Composable
-fun Greeting(name: String, modifier: Modifier = Modifier) {
-    Text(
-        text = "Hello $name!",
-        modifier = modifier
-    )
-}
+    override fun onStop() {
+        super.onStop()
+        viewModel.incrementRotateCount()
+    }
 
-@Preview(showBackground = true)
-@Composable
-fun GreetingPreview() {
-    AndroidCTFSeminarTheme {
-        Greeting("Android")
+    external fun getFlagFromJNI(): String
+
+    companion object {
+        init {
+            System.loadLibrary("androidctfseminar")
+        }
     }
 }
